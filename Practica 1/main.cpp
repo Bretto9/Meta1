@@ -12,11 +12,11 @@
 using namespace std;
 
 int main(int argc, char** argv) {
-    
+
     int nCasos = 0;
     string temp;
     ifstream flujo("dat/bur26a.dat");
-
+    int celda;
     if (flujo.is_open()) {
 
 
@@ -25,17 +25,26 @@ int main(int argc, char** argv) {
             getline(flujo, temp);
 
             nCasos = atoi(temp.c_str());
-            
+
             int **flujos;
 
-   
+            flujos = new int*[nCasos];
 
-            flujos=new int*[nCasos];
-            for(int i = 0; i < nCasos; i++){
+            for (int i = 0; i < nCasos; i++) {
                 flujos[i] = new int[nCasos];
             }
-    
-        int **distancias;
+
+            for (int i = 0; i < nCasos; i++) {
+                for (int j = 0; j < nCasos; j++) {
+                    getline(flujo, temp," ");
+
+            celda = atoi(temp.c_str());
+            cout<<celda;
+                  //  flujos[i][j]=;
+                }
+            }
+
+            int **distancias;
 
         }
         //     char c = flujo.get();
@@ -48,9 +57,9 @@ int main(int argc, char** argv) {
         cout << "Error opening file";
     }
     cout << nCasos;
-    
-    
-    
+
+
+
 
     return 0;
 }
