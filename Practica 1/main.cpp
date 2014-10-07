@@ -12,6 +12,7 @@
 using namespace std;
 
 int main(int argc, char** argv) {
+    
     int nCasos = 0;
     string temp;
     ifstream flujo("dat/bur26a.dat");
@@ -24,6 +25,12 @@ int main(int argc, char** argv) {
             getline(flujo, temp);
 
             nCasos = atoi(temp.c_str());
+            
+            int **flujos;
+    flujos=new int*[nCasos][nCasos];
+    
+        int **distancias;
+
         }
         //     char c = flujo.get();
         //    while (flujo.good()) {
@@ -35,6 +42,9 @@ int main(int argc, char** argv) {
         cout << "Error opening file";
     }
     cout << nCasos;
+    
+    
+    
 
     return 0;
 }
