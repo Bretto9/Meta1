@@ -14,7 +14,7 @@ using namespace std;
 int main(int argc, char** argv) {
     int nCasos = 0;
     string temp;
-    ifstream flujo("bur26a.dat");
+    ifstream flujo("dat/bur26a.dat");
 
     if (flujo.is_open()) {
 
