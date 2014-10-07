@@ -27,7 +27,10 @@ int main(int argc, char** argv) {
             nCasos = atoi(temp.c_str());
             
             int **flujos;
-    flujos=new int*[nCasos][nCasos];
+            flujos=new int*[nCasos];
+            for(int i = 0; i < nCasos; i++){
+                flujos[i] = new int[nCasos];
+            }
     
         int **distancias;
 
