@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="94">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <logicalFolder name="HeaderFiles"
+                   displayName="Header Files"
+                   projectFiles="true">
+    </logicalFolder>
+    <logicalFolder name="ResourceFiles"
+                   displayName="Resource Files"
+                   projectFiles="true">
+    </logicalFolder>
+    <logicalFolder name="SourceFiles"
+                   displayName="Source Files"
+                   projectFiles="true">
+      <logicalFolder name="dat" displayName="dat" projectFiles="true">
+        <itemPath>dat/bur26a.dat</itemPath>
+        <itemPath>dat/bur26a.sln</itemPath>
+        <itemPath>dat/bur26b.dat</itemPath>
+        <itemPath>dat/bur26b.sln</itemPath>
+        <itemPath>dat/chr20a.dat</itemPath>
+        <itemPath>dat/chr20a.sln</itemPath>
+        <itemPath>dat/chr25a.dat</itemPath>
+        <itemPath>dat/chr25a.sln</itemPath>
+        <itemPath>dat/els19.dat</itemPath>
+        <itemPath>dat/els19.sln</itemPath>
+        <itemPath>dat/esc32a.dat</itemPath>
+        <itemPath>dat/esc32a.sln</itemPath>
+        <itemPath>dat/kra32.dat</itemPath>
+        <itemPath>dat/lipa90a.dat</itemPath>
+        <itemPath>dat/lipa90a.sln</itemPath>
+        <itemPath>dat/nug25.dat</itemPath>
+        <itemPath>dat/nug25.sln</itemPath>
+        <itemPath>dat/sko42.dat</itemPath>
+        <itemPath>dat/sko42.sln</itemPath>
+        <itemPath>dat/sko49.dat</itemPath>
+        <itemPath>dat/sko49.sln</itemPath>
+        <itemPath>dat/tai30a.dat</itemPath>
+        <itemPath>dat/tai30a.sln</itemPath>
+        <itemPath>dat/tai30b.dat</itemPath>
+        <itemPath>dat/tai30b.sln</itemPath>
+        <itemPath>dat/tai35a.dat</itemPath>
+        <itemPath>dat/tai35a.sln</itemPath>
+        <itemPath>dat/tai35b.dat</itemPath>
+        <itemPath>dat/tai35b.sln</itemPath>
+        <itemPath>dat/tai40a.dat</itemPath>
+        <itemPath>dat/tai40a.sln</itemPath>
+        <itemPath>dat/tai50a.dat</itemPath>
+        <itemPath>dat/tai50a.sln</itemPath>
+        <itemPath>dat/tai50b.dat</itemPath>
+        <itemPath>dat/tai50b.sln</itemPath>
+        <itemPath>dat/tai60a.dat</itemPath>
+        <itemPath>dat/tai60a.sln</itemPath>
+        <itemPath>dat/tho40.dat</itemPath>
+        <itemPath>dat/tho40.sln</itemPath>
+      </logicalFolder>
+      <itemPath>main.cpp</itemPath>
+    </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <sourceRootList>
+    <Elem>dat</Elem>
+  </sourceRootList>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Debug" type="1">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+      </compileType>
+      <item path="dat/bur26a.dat" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/bur26a.sln" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/bur26b.dat" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/bur26b.sln" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/chr20a.dat" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/chr20a.sln" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/chr25a.dat" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/chr25a.sln" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/els19.dat" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/els19.sln" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/esc32a.dat" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/esc32a.sln" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/kra32.dat" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/lipa90a.dat" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/lipa90a.sln" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/nug25.dat" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/nug25.sln" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/sko42.dat" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/sko42.sln" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/sko49.dat" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/sko49.sln" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/tai30a.dat" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/tai30a.sln" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/tai30b.dat" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/tai30b.sln" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/tai35a.dat" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/tai35a.sln" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/tai35b.dat" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/tai35b.sln" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/tai40a.dat" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/tai40a.sln" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/tai50a.dat" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/tai50a.sln" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/tai50b.dat" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/tai50b.sln" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/tai60a.dat" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/tai60a.sln" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/tho40.dat" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/tho40.sln" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+    </conf>
+    <conf name="Release" type="1">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <developmentMode>5</developmentMode>
+        </cTool>
+        <ccTool>
+          <developmentMode>5</developmentMode>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>5</developmentMode>
+        </asmTool>
+      </compileType>
+      <item path="dat/bur26a.dat" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/bur26a.sln" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/bur26b.dat" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/bur26b.sln" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/chr20a.dat" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/chr20a.sln" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/chr25a.dat" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/chr25a.sln" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/els19.dat" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/els19.sln" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/esc32a.dat" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/esc32a.sln" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/kra32.dat" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/lipa90a.dat" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/lipa90a.sln" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/nug25.dat" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/nug25.sln" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/sko42.dat" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/sko42.sln" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/sko49.dat" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/sko49.sln" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/tai30a.dat" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/tai30a.sln" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/tai30b.dat" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/tai30b.sln" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/tai35a.dat" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/tai35a.sln" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/tai35b.dat" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/tai35b.sln" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/tai40a.dat" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/tai40a.sln" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/tai50a.dat" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/tai50a.sln" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/tai50b.dat" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/tai50b.sln" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/tai60a.dat" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/tai60a.sln" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/tho40.dat" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dat/tho40.sln" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>
