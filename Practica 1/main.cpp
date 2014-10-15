@@ -24,10 +24,12 @@ int lectura(int **&flujos, int **&distancias, string fichero) {
             for (int i = 0; i < nCasos; i++) {
                 flujos[i] = new int[nCasos];
             }
-            getline(flujo, temp);
+            
             int tempi = 0;
             int tempj = 0;
             while (getline(flujo, temp) && tempi < nCasos) {
+                
+                if(temp.length()>0){
                 for (int i = 0; i < nCasos; i++) {
                     temp = temp.substr(temp.find_first_not_of(" "));
                     flujos[tempi][tempj] = atoi(temp.substr(0, temp.find(' ')).c_str());
@@ -36,7 +38,9 @@ int lectura(int **&flujos, int **&distancias, string fichero) {
                 }
                 tempi++;
                 tempj = 0;
+                }
             }
+            
             distancias = new int*[nCasos];
             for (int i = 0; i < nCasos; i++) {
                 distancias[i] = new int[nCasos];
@@ -44,6 +48,7 @@ int lectura(int **&flujos, int **&distancias, string fichero) {
             tempi = 0;
             tempj = 0;
             while (getline(flujo, temp) && tempi < nCasos) {
+                if(temp.length()>0){
                 for (int i = 0; i < nCasos; i++) {
                     temp = temp.substr(temp.find_first_not_of(" "));
                     distancias[tempi][tempj] = atoi(temp.substr(0, temp.find(' ')).c_str());
@@ -52,6 +57,7 @@ int lectura(int **&flujos, int **&distancias, string fichero) {
                 }
                 tempi++;
                 tempj = 0;
+                }
             }
             return nCasos;
         } else {
@@ -105,12 +111,23 @@ int menor(int *v, int tam) {
     }
 }
 
+int coste(int *v, int tam, int **distancias, int **flujos) {
+    int cost = 0;
+    for (int i = 0; i < tam; i++) {
+        for (int j = 0; j < tam; j++) {
+            cost += (flujos[i][j])*(distancias[v[i]][v[j]]);
+        }
+    }
+
+    return cost;
+}
+
 int greedy(int **flujos, int **distancias, int *&solGreedy, int nCasos) {
     int *potFlujos = potencial(flujos, nCasos);
     int *potDistancias = potencial(distancias, nCasos);
     solGreedy = new int[nCasos];
     int cont = nCasos;
-
+    int cost;
     while (cont > 0) {
         int may = mayor(potFlujos, nCasos);
         int men = menor(potDistancias, nCasos);
@@ -123,25 +140,53 @@ int greedy(int **flujos, int **distancias, int *&solGreedy, int nCasos) {
             break;
         }
     }
-    cout << "ASIGNACION GREEDY"<< endl;
-    if (cont == 0) {
-        for (int i = 0; i < nCasos; i++) {
-            cout << "Para la unidad " << i + 1 << " localizacion " << solGreedy[i] + 1 << endl;
-        }
-        return 1;
-    } else { 
-        return -1;
+    cost = coste(solGreedy, nCasos, distancias, flujos);
+
+    return cost;
+
+}
+
+int* solInicial(int tam) {
+
+    srand(time(0));
+    int aleatorio;
+    int *solucionInicial = new int[tam];
+    bool* usado = new bool[tam];
+    for (int i = 0; i < tam; i++) {
+        usado[i] = false;
     }
 
+    for (int i = 0; i < tam; i++) {
+        do {
+            aleatorio = rand() % tam;
+        } while(usado[aleatorio] == true);
+        
+            usado[aleatorio] = true;
+            solucionInicial[i] = aleatorio;
+        
+    }
+    return solucionInicial;
 }
 
 int main(int argc, char** argv) {
     int **flujos, **distancias;
-    string fichero = "dat/bur26a.dat";
+    string fichero = "dat/tai50b.dat";
     int nCasos = lectura(flujos, distancias, fichero);
     int *solGreedy;
-    greedy(flujos, distancias, solGreedy, nCasos);
+    int costeGreedy;
+    costeGreedy = greedy(flujos, distancias, solGreedy, nCasos);
+    cout << "Coste Greedy para fichero " << fichero << ": " << costeGreedy;
 
+    
+    int* solucionInicial=new int[nCasos];
+    solucionInicial=solInicial(nCasos);
+    
+    
+//                cout << endl << "SOLUCION INICIAL" << endl;
+//            for(int i = 0; i < nCasos; i++){
+//                cout << solucionInicial[i] << " ";
+//            }
+    
     //        cout << "FLUJOS" << endl;
     //        for (int i = 0; i < nCasos; i++) {
     //            for (int j = 0; j < nCasos; j++) {
