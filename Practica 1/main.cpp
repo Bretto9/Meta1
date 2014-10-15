@@ -1,10 +1,3 @@
-/* 
- * File:   main.cpp
- * Author: JoseDavid
- *
- * Created on 7 de octubre de 2014, 17:15
- */
-
 #include <cstdlib>
 #include <iostream>
 #include <fstream>
@@ -24,19 +17,21 @@ int lectura(int **&flujos, int **&distancias, string fichero) {
             for (int i = 0; i < nCasos; i++) {
                 flujos[i] = new int[nCasos];
             }
-            getline(flujo, temp);
             int tempi = 0;
             int tempj = 0;
             while (getline(flujo, temp) && tempi < nCasos) {
-                for (int i = 0; i < nCasos; i++) {
-                    temp = temp.substr(temp.find_first_not_of(" "));
-                    flujos[tempi][tempj] = atoi(temp.substr(0, temp.find(' ')).c_str());
-                    tempj++;
-                    temp = temp.substr(temp.find(' ') + 1);
+                if (temp.length() > 0) {
+                    for (int i = 0; i < nCasos; i++) {
+                        temp = temp.substr(temp.find_first_not_of(" "));
+                        flujos[tempi][tempj] = atoi(temp.substr(0, temp.find(' ')).c_str());
+                        tempj++;
+                        temp = temp.substr(temp.find(' ') + 1);
+                    }
+                    tempi++;
+                    tempj = 0;
                 }
-                tempi++;
-                tempj = 0;
             }
+
             distancias = new int*[nCasos];
             for (int i = 0; i < nCasos; i++) {
                 distancias[i] = new int[nCasos];
@@ -44,14 +39,16 @@ int lectura(int **&flujos, int **&distancias, string fichero) {
             tempi = 0;
             tempj = 0;
             while (getline(flujo, temp) && tempi < nCasos) {
-                for (int i = 0; i < nCasos; i++) {
-                    temp = temp.substr(temp.find_first_not_of(" "));
-                    distancias[tempi][tempj] = atoi(temp.substr(0, temp.find(' ')).c_str());
-                    tempj++;
-                    temp = temp.substr(temp.find(' ') + 1);
+                if (temp.length() > 0) {
+                    for (int i = 0; i < nCasos; i++) {
+                        temp = temp.substr(temp.find_first_not_of(" "));
+                        distancias[tempi][tempj] = atoi(temp.substr(0, temp.find(' ')).c_str());
+                        tempj++;
+                        temp = temp.substr(temp.find(' ') + 1);
+                    }
+                    tempi++;
+                    tempj = 0;
                 }
-                tempi++;
-                tempj = 0;
             }
             return nCasos;
         } else {
@@ -105,6 +102,16 @@ int menor(int *v, int tam) {
     }
 }
 
+int coste(int nCasos, int **flujos, int **distancias, int *solGreedy) {
+    int cost = 0;
+    for (int i = 0; i < nCasos; i++) {
+        for (int j = 0; j < nCasos; j++) {
+            cost += flujos[i][j]*(distancias[solGreedy[i]][solGreedy[j]]);
+        }
+    }
+    return cost;
+}
+
 int greedy(int **flujos, int **distancias, int *&solGreedy, int nCasos) {
     int *potFlujos = potencial(flujos, nCasos);
     int *potDistancias = potencial(distancias, nCasos);
@@ -123,24 +130,62 @@ int greedy(int **flujos, int **distancias, int *&solGreedy, int nCasos) {
             break;
         }
     }
-    cout << "ASIGNACION GREEDY"<< endl;
+
+    //cout << "ASIGNACION GREEDY"<< endl;
+    int costo;
     if (cont == 0) {
-        for (int i = 0; i < nCasos; i++) {
-            cout << "Para la unidad " << i + 1 << " localizacion " << solGreedy[i] + 1 << endl;
-        }
-        return 1;
-    } else { 
+        //for (int i = 0; i < nCasos; i++) {
+        //    cout << "Para la unidad " << i + 1 << " localizacion " << solGreedy[i] + 1 << endl;
+        //}
+        costo = coste(nCasos, flujos, distancias, solGreedy);
+        //cout << "Tiene coste: " << costo << endl;
+        return costo;
+    } else {
         return -1;
     }
 
 }
 
 int main(int argc, char** argv) {
+    
     int **flujos, **distancias;
-    string fichero = "dat/bur26a.dat";
-    int nCasos = lectura(flujos, distancias, fichero);
-    int *solGreedy;
-    greedy(flujos, distancias, solGreedy, nCasos);
+    string fichero = "dat/els19.dat";
+    string ficheros[20] = {"dat/els19.dat", "dat/chr20a.dat", "dat/chr25a.dat", "dat/nug25.dat",
+        "dat/bur26a.dat", "dat/bur26b.dat", "dat/tai30a.dat", "dat/tai30b.dat",
+        "dat/esc32a.dat", "dat/kra32.dat", "dat/tai35a.dat", "dat/tai35b.dat",
+        "dat/tho40.dat", "dat/tai40a.dat", "dat/sko42.dat", "dat/sko49.dat",
+        "dat/tai50a.dat", "dat/tai50b.dat", "dat/tai60a.dat", "dat/lipa90a.dat"};
+    // GREEDY
+        for (int i = 0; i < 20; i++) {
+            cout << "Leyendo fichero... " << ficheros[i] << endl;
+            int nCasos = lectura(flujos, distancias, ficheros[i]);
+    
+            int *solGreedy;
+            int costo = greedy(flujos, distancias, solGreedy, nCasos) ;
+            cout << "Coste del algoritmo voraz para el fichero( " << i+1 << " ) " << ficheros[i] << " es:" << costo << endl;
+            for(int j = 0; j < nCasos; j ++){
+                delete[] flujos[j];
+                delete[] distancias[j];
+            }
+            delete flujos;
+            delete distancias;
+            delete solGreedy;
+        }
+    
+//    cout << "Leyendo fichero... " << fichero << endl;
+//    int nCasos = lectura(flujos, distancias, fichero);
+//
+//    int *solGreedy;
+//    int costo = greedy(flujos, distancias, solGreedy, nCasos);
+//    cout << "Coste del algoritmo voraz para el fichero( " << 1 << " ) " << fichero << " es:" << costo << endl;
+//    for (int j = 0; j < nCasos; j++) {
+//        delete[] flujos[j];
+//        delete[] distancias[j];
+//    }
+//    delete flujos;
+//    delete distancias;
+//    delete solGreedy;
+
 
     //        cout << "FLUJOS" << endl;
     //        for (int i = 0; i < nCasos; i++) {
@@ -168,5 +213,6 @@ int main(int argc, char** argv) {
     //        for(int i = 0; i < nCasos; i++){
     //            cout << potDistancias[i] << " ";
     //        }
+
     return 0;
 }
