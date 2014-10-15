@@ -21,7 +21,3 @@
 *.exe
 *.out
 *.app
- 
- #Otros
- *.zip
- *.stackdump
