@@ -31,7 +31,6 @@ int lectura(int **&flujos, int **&distancias, string fichero) {
                     tempj = 0;
                 }
             }
-
             distancias = new int*[nCasos];
             for (int i = 0; i < nCasos; i++) {
                 distancias[i] = new int[nCasos];
@@ -102,11 +101,11 @@ int menor(int *v, int tam) {
     }
 }
 
-int coste(int nCasos, int **flujos, int **distancias, int *solGreedy) {
+int coste(int *v, int tam, int **distancias, int **flujos) {
     int cost = 0;
-    for (int i = 0; i < nCasos; i++) {
-        for (int j = 0; j < nCasos; j++) {
-            cost += flujos[i][j]*(distancias[solGreedy[i]][solGreedy[j]]);
+    for (int i = 0; i < tam; i++) {
+        for (int j = 0; j < tam; j++) {
+            cost += (flujos[i][j])*(distancias[v[i]][v[j]]);
         }
     }
     return cost;
@@ -117,7 +116,7 @@ int greedy(int **flujos, int **distancias, int *&solGreedy, int nCasos) {
     int *potDistancias = potencial(distancias, nCasos);
     solGreedy = new int[nCasos];
     int cont = nCasos;
-
+    int cost;
     while (cont > 0) {
         int may = mayor(potFlujos, nCasos);
         int men = menor(potDistancias, nCasos);
@@ -130,20 +129,38 @@ int greedy(int **flujos, int **distancias, int *&solGreedy, int nCasos) {
             break;
         }
     }
-
-    //cout << "ASIGNACION GREEDY"<< endl;
+	
     int costo;
     if (cont == 0) {
-        //for (int i = 0; i < nCasos; i++) {
-        //    cout << "Para la unidad " << i + 1 << " localizacion " << solGreedy[i] + 1 << endl;
-        //}
         costo = coste(nCasos, flujos, distancias, solGreedy);
-        //cout << "Tiene coste: " << costo << endl;
         return costo;
     } else {
         return -1;
+    cost = coste(solGreedy, nCasos, distancias, flujos);
+    return cost;
+
+}
+
+int* solInicial(int tam) {
+
+    srand(time(0));
+    int aleatorio;
+    int *solucionInicial = new int[tam];
+    bool* usado = new bool[tam];
+    for (int i = 0; i < tam; i++) {
+        usado[i] = false;
     }
 
+    for (int i = 0; i < tam; i++) {
+        do {
+            aleatorio = rand() % tam;
+        } while(usado[aleatorio] == true);
+        
+            usado[aleatorio] = true;
+            solucionInicial[i] = aleatorio;
+        
+    }
+    return solucionInicial;
 }
 
 int main(int argc, char** argv) {
@@ -186,7 +203,16 @@ int main(int argc, char** argv) {
 //    delete distancias;
 //    delete solGreedy;
 
-
+    
+    int* solucionInicial=new int[nCasos];
+    solucionInicial=solInicial(nCasos);
+    
+    
+//                cout << endl << "SOLUCION INICIAL" << endl;
+//            for(int i = 0; i < nCasos; i++){
+//                cout << solucionInicial[i] << " ";
+//            }
+    
     //        cout << "FLUJOS" << endl;
     //        for (int i = 0; i < nCasos; i++) {
     //            for (int j = 0; j < nCasos; j++) {
