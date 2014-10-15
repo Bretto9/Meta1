@@ -102,13 +102,13 @@ int menor(int *v, int tam) {
 }
 
 int coste(int *v, int tam, int **distancias, int **flujos) {
-    int cost = 0;
+    int costo = 0;
     for (int i = 0; i < tam; i++) {
         for (int j = 0; j < tam; j++) {
-            cost += (flujos[i][j])*(distancias[v[i]][v[j]]);
+            costo += (flujos[i][j])*(distancias[v[i]][v[j]]);
         }
     }
-    return cost;
+    return costo;
 }
 
 int greedy(int **flujos, int **distancias, int *&solGreedy, int nCasos) {
@@ -129,16 +129,17 @@ int greedy(int **flujos, int **distancias, int *&solGreedy, int nCasos) {
             break;
         }
     }
-	
+
     int costo;
     if (cont == 0) {
-        costo = coste(nCasos, flujos, distancias, solGreedy);
+        costo = coste(solGreedy,nCasos, flujos, distancias);
         return costo;
     } else {
         return -1;
-    cost = coste(solGreedy, nCasos, distancias, flujos);
-    return cost;
+        cost = coste(solGreedy, nCasos, distancias, flujos);
+        return cost;
 
+    }
 }
 
 int* solInicial(int tam) {
@@ -154,17 +155,17 @@ int* solInicial(int tam) {
     for (int i = 0; i < tam; i++) {
         do {
             aleatorio = rand() % tam;
-        } while(usado[aleatorio] == true);
-        
-            usado[aleatorio] = true;
-            solucionInicial[i] = aleatorio;
-        
+        } while (usado[aleatorio] == true);
+
+        usado[aleatorio] = true;
+        solucionInicial[i] = aleatorio;
+
     }
     return solucionInicial;
 }
 
 int main(int argc, char** argv) {
-    
+
     int **flujos, **distancias;
     string fichero = "dat/els19.dat";
     string ficheros[20] = {"dat/els19.dat", "dat/chr20a.dat", "dat/chr25a.dat", "dat/nug25.dat",
@@ -172,73 +173,51 @@ int main(int argc, char** argv) {
         "dat/esc32a.dat", "dat/kra32.dat", "dat/tai35a.dat", "dat/tai35b.dat",
         "dat/tho40.dat", "dat/tai40a.dat", "dat/sko42.dat", "dat/sko49.dat",
         "dat/tai50a.dat", "dat/tai50b.dat", "dat/tai60a.dat", "dat/lipa90a.dat"};
-    // GREEDY
-        for (int i = 0; i < 20; i++) {
-            cout << "Leyendo fichero... " << ficheros[i] << endl;
-            int nCasos = lectura(flujos, distancias, ficheros[i]);
     
-            int *solGreedy;
-            int costo = greedy(flujos, distancias, solGreedy, nCasos) ;
-            cout << "Coste del algoritmo voraz para el fichero( " << i+1 << " ) " << ficheros[i] << " es:" << costo << endl;
-            for(int j = 0; j < nCasos; j ++){
-                delete[] flujos[j];
-                delete[] distancias[j];
-            }
-            delete flujos;
-            delete distancias;
-            delete solGreedy;
-        }
-    
-//    cout << "Leyendo fichero... " << fichero << endl;
-//    int nCasos = lectura(flujos, distancias, fichero);
+    // GREEDY MUCHOS FICHEROS
+//    for (int i = 0; i < 20; i++) {
+//        cout << "Leyendo fichero... " << ficheros[i] << endl;
+//        int nCasos = lectura(flujos, distancias, ficheros[i]);
 //
-//    int *solGreedy;
-//    int costo = greedy(flujos, distancias, solGreedy, nCasos);
-//    cout << "Coste del algoritmo voraz para el fichero( " << 1 << " ) " << fichero << " es:" << costo << endl;
-//    for (int j = 0; j < nCasos; j++) {
-//        delete[] flujos[j];
-//        delete[] distancias[j];
+//        int *solGreedy;
+//        int costo = greedy(flujos, distancias, solGreedy, nCasos);
+//        cout << "Coste del algoritmo voraz para el fichero( " << i + 1 << " ) " << ficheros[i] << " es:" << costo << endl;
+//        for (int j = 0; j < nCasos; j++) {
+//            delete[] flujos[j];
+//            delete[] distancias[j];
+//        }
+//        delete flujos;
+//        delete distancias;
+//        delete solGreedy;
 //    }
-//    delete flujos;
-//    delete distancias;
-//    delete solGreedy;
 
     
-    int* solucionInicial=new int[nCasos];
-    solucionInicial=solInicial(nCasos);
+    //GREEDY UN FICERO
+        cout << "Leyendo fichero... " << fichero << endl;
+        int nCasos = lectura(flujos, distancias, fichero);
     
-    
-//                cout << endl << "SOLUCION INICIAL" << endl;
-//            for(int i = 0; i < nCasos; i++){
-//                cout << solucionInicial[i] << " ";
-//            }
-    
-    //        cout << "FLUJOS" << endl;
-    //        for (int i = 0; i < nCasos; i++) {
-    //            for (int j = 0; j < nCasos; j++) {
-    //                cout << flujos[i][j] << " ";
+        int *solGreedy;
+        int costo = greedy(flujos, distancias, solGreedy, nCasos);
+        cout << "Coste del algoritmo voraz para el fichero( " << 1 << " ) " << fichero << " es:" << costo << endl;
+        for (int j = 0; j < nCasos; j++) {
+            delete[] flujos[j];
+            delete[] distancias[j];
+        }
+        delete flujos;
+        delete distancias;
+        delete solGreedy;
+
+
+    int* solucionInicial = new int[nCasos];
+    solucionInicial = solInicial(nCasos);
+
+
+    //                cout << endl << "SOLUCION INICIAL" << endl;
+    //            for(int i = 0; i < nCasos; i++){
+    //                cout << solucionInicial[i] << " ";
     //            }
-    //            cout << endl;
-    //        }
-    //        cout << endl << "DISTANCIAS" << endl;
-    //        for (int i = 0; i < nCasos; i++) {
-    //            for (int j = 0; j < nCasos; j++) {
-    //                cout << distancias[i][j] << " ";
-    //            }
-    //            cout << endl;
-    //        }
-    //    
-    //        int *potFlujos = potencial(flujos, nCasos);
-    //        cout << endl << "POTENCIAL FLUJOS" << endl;
-    //        for(int i = 0; i < nCasos; i++){
-    //            cout << potFlujos[i] << " ";
-    //        }
-    //    
-    //        int *potDistancias = potencial(distancias, nCasos);
-    //        cout << endl << "POTENCIAL DISTANCIAS" << endl;
-    //        for(int i = 0; i < nCasos; i++){
-    //            cout << potDistancias[i] << " ";
-    //        }
+
+ 
 
     return 0;
 }
