@@ -207,43 +207,55 @@ int factorizacion(int* v, int tam, int **flujos, int** distancias, int r, int s)
 
 int *busquedaLocal(int nCasos, int **flujos, int **distancias) {
     int* solucionActual = solInicial(nCasos);
-    int* solucionCandidata = new int[nCasos];
+    //int* solucionCandidata = new int[nCasos];
     int costo = coste(solucionActual, nCasos, distancias, flujos);
-    for (int i = 0; i < nCasos; i++) {
-        solucionCandidata[i] = solucionActual[i];
-    }
+//    for (int i = 0; i < nCasos; i++) {
+//        solucionCandidata[i] = solucionActual[i];
+//    }
     bitset<100> dlb(0);
     bool mejora = false;
     for (int i = nCasos; i < 100; i++) {
         dlb.flip(i);
     }
-
+    bool mostrado = false;
     while (!dlb.all()) {
         for (int i = 0; i < nCasos; i++) {
             if (!dlb.test(i)) {
                 mejora = false;
                 for (int j = 0; j < nCasos; j++) {
                     if (!dlb.test(j)) {
-                        int tmp = solucionCandidata[j];
-                        solucionCandidata[j] = solucionCandidata[i];
-                        solucionCandidata[i] = tmp;
+//                        solucionCandidata[j] = solucionActual[i];
+//                        solucionCandidata[i] = solucionActual[j];
 
-                        int variacion = factorizacion(solucionCandidata, nCasos, flujos, distancias, i, j);
-                        //cout << " La factorizacion devuelve un resultado de: " << variacion<< endl;
-                        //int nCoste = coste(solucionCandidata, nCasos, distancias, flujos);
+                        int variacion = factorizacion(solucionActual, nCasos, flujos, distancias, i, j);
+
                         if (variacion < 0) {
+                            //if (!mostrado) {
+                            //                                mostrado = true;
+                            //                                int nCoste = coste(solucionCandidata, nCasos, distancias, flujos);
+                            //                                int oCoste = coste(solucionActual, nCasos, distancias, flujos);
+                            //                                cout << " ------------------------- " <<endl;
+                            //                                cout << "Nuevo coste: " << nCoste << endl;
+                            //                                cout << "Antiguo coste: " << oCoste << endl;
+                            //                                cout << "Nuevo coste + variacion: " << nCoste + variacion << endl;
+                            //                                cout << " ------------------------- " <<endl;
+                            //}
                             //cout << "Cambio " << i << " por " << j << endl;
                             costo += variacion;
-                            tmp = solucionActual[j];
+                            int tmp = solucionActual[j];
                             solucionActual[j] = solucionActual[i];
                             solucionActual[i] = tmp;
+                            //                            tmp = solucionActual[j];
+                            //                            solucionActual[j] = solucionActual[i];
+                            //                            solucionActual[i] = tmp;
                             dlb.reset(i);
                             dlb.reset(j);
                             mejora = true;
-                        } else {
-                            solucionCandidata[i] = solucionActual[i];
-                            solucionCandidata[j] = solucionActual[j];
-                        }
+                        } 
+//                        else {
+//                            solucionCandidata[i] = solucionActual[i];
+//                            solucionCandidata[j] = solucionActual[j];
+//                        }
                     }
                 }
                 if (!mejora) {
@@ -253,7 +265,9 @@ int *busquedaLocal(int nCasos, int **flujos, int **distancias) {
         }
         //cout << dlb << endl;
     }
-    delete[] solucionCandidata;
+//    delete[] solucionCandidata;
+    //    cout << "Coste sin variacion: " << coste(solucionActual, nCasos, distancias, flujos) << endl;
+    //    cout << "Coste con variacion: " << costo << endl;
     return solucionActual;
 }
 
@@ -284,40 +298,36 @@ int main(int argc, char** argv) {
     //        delete solGreedy;
     //    }
 
+    for (int i = 0; i < 20; i++) {
+        fichero = ficheros[i];
+        //GREEDY UN FICERO
+        cout << "Leyendo fichero... " << fichero << endl;
+        int nCasos = lectura(flujos, distancias, fichero);
 
-    //GREEDY UN FICERO
-    cout << "Leyendo fichero... " << fichero << endl;
-    int nCasos = lectura(flujos, distancias, fichero);
-
-    int *solGreedy;
-    int costo = greedy(flujos, distancias, solGreedy, nCasos);
-    cout << "Coste del algoritmo voraz para el fichero( " << 1 << " ) " << fichero << " es:" << costo << endl;
-
-
-    int *solLocal = busquedaLocal(nCasos, flujos, distancias);
-
-    costo = coste(solLocal, nCasos, distancias, flujos);
-    //    for (int i = 0; i < nCasos; i++) {
-    //        cout << "Para la unidad " << i + 1 << " asignada localizacion " << solLocal[i] + 1 << endl;
-    //    }
-    cout << endl << "Coste del algoritmo LOCAL para el fichero( " << 1 << " ) " << fichero << " es:" << costo << endl;
+        int *solGreedy;
+        int costo = greedy(flujos, distancias, solGreedy, nCasos);
+        cout << "Coste del algoritmo voraz para el fichero( " << 1 << " ) " << fichero << " es:" << costo << endl;
 
 
-    //                cout << endl << "SOLUCION INICIAL" << endl;
-    //            for(int i = 0; i < nCasos; i++){
-    //                cout << solucionInicial[i] << " ";
-    //            }
+        int *solLocal = busquedaLocal(nCasos, flujos, distancias);
 
+        costo = coste(solLocal, nCasos, distancias, flujos);
+        //    for (int i = 0; i < nCasos; i++) {
+        //        cout << "Para la unidad " << i + 1 << " asignada localizacion " << solLocal[i] + 1 << endl;
+        //    }
+        cout << "Coste del algoritmo LOCAL para el fichero( " << 1 << " ) " << fichero << " es:" << costo << endl;
 
-
-
-
-    for (int j = 0; j < nCasos; j++) {
-        delete[] flujos[j];
-        delete[] distancias[j];
+        //                cout << endl << "SOLUCION INICIAL" << endl;
+        //            for(int i = 0; i < nCasos; i++){
+        //                cout << solucionInicial[i] << " ";
+        
+        for (int j = 0; j < nCasos; j++) {
+            delete[] flujos[j];
+            delete[] distancias[j];
+        }
+        delete flujos;
+        delete distancias;
+        delete solGreedy;
     }
-    delete flujos;
-    delete distancias;
-    delete solGreedy;
     return 0;
 }
