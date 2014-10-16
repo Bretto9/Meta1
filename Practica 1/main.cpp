@@ -166,6 +166,30 @@ int* solInicial(int tam) {
     return solucionInicial;
 }
 
+/**
+ * 
+ * @param v  vector solucion inicial
+ * @param tam nCasos
+ * @param flujos 
+ * @param distancias
+ * @param r  posicion 1 a cambiar
+ * @param s posicion 2 a cambiar
+ * @return 
+ */
+int factorizacion(int* v,int tam,int **flujos,int** distancias,int r,int s){
+   
+    int fact=0;
+    for(int k=0;k<tam;k++){
+        
+       fact+= flujos[r][k]*(distancias[v[s]][v[k]]-distancias[v[r]][v[k]])+
+               flujos[s][k]*(distancias[v[r]][v[k]]-distancias[v[s]][v[k]])+
+               flujos[k][r]*(distancias[v[k]][v[s]]-distancias[v[k]][v[r]])+
+               flujos[k][s]*(distancias[v[k]][v[r]]-distancias[v[k]][v[s]]);
+    }
+    
+    return fact;
+}
+
 int *busquedaLocal(int nCasos, int **flujos, int **distancias) {
     int* solucionActual = solInicial(nCasos);
     int* solucionCandidata = new int[nCasos];
@@ -187,7 +211,9 @@ int *busquedaLocal(int nCasos, int **flujos, int **distancias) {
                         int tmp = solucionCandidata[j];
                         solucionCandidata[j] = solucionCandidata[i];
                         solucionCandidata[i] = tmp;
-                        if(coste(solucionCandidata, nCasos, distancias, flujos) > coste(solucionActual, nCasos, distancias, flujos)){
+                        //cout << " La factorizacion devuelve un resultado de: " << factorizacion(solucionCandidata, nCasos, flujos, distancias,i,j) << endl;
+                        if(factorizacion(solucionCandidata, nCasos, flujos, distancias,i,j) < 0){
+                            cout << "Cambio " << i << " por " << j << endl;
                             tmp = solucionActual[j];
                             solucionActual[j] = solucionActual[i];
                             solucionActual[i] = tmp;
@@ -195,9 +221,12 @@ int *busquedaLocal(int nCasos, int **flujos, int **distancias) {
                             dlb.reset(j);
                             mejora = true;
                         }
+                        //cout << "FIN IF" << endl;
                     }
                 }
+                //cout << "FIN FOR" << endl;
                 if (!mejora) {
+                    cout << "No ha mejorado con ninguno" << endl;
                     dlb.set(i);
                 }
             }
@@ -210,7 +239,7 @@ int *busquedaLocal(int nCasos, int **flujos, int **distancias) {
 int main(int argc, char** argv) {
 
     int **flujos, **distancias;
-    string fichero = "dat/tho40.dat";
+    string fichero = "dat/els19.dat";
     string ficheros[20] = {"dat/els19.dat", "dat/chr20a.dat", "dat/chr25a.dat", "dat/nug25.dat",
         "dat/bur26a.dat", "dat/bur26b.dat", "dat/tai30a.dat", "dat/tai30b.dat",
         "dat/esc32a.dat", "dat/kra32.dat", "dat/tai35a.dat", "dat/tai35b.dat",
