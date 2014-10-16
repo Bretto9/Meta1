@@ -1,4 +1,6 @@
 #include <cstdlib>
+#include <string>
+#include <sstream>
 #include <iostream>
 #include <fstream>
 #include <bitset>         // std::bitset
@@ -11,7 +13,6 @@ int lectura(int **&flujos, int **&distancias, string fichero) {
     string temp;
     ifstream flujo(fichero.c_str());
     int nCasos = 0;
-
     if (flujo.is_open()) {
         if (flujo.good()) {
             getline(flujo, temp);
@@ -20,36 +21,49 @@ int lectura(int **&flujos, int **&distancias, string fichero) {
             for (int i = 0; i < nCasos; i++) {
                 flujos[i] = new int[nCasos];
             }
-            int tempi = 0;
-            int tempj = 0;
-            while (getline(flujo, temp) && tempi < nCasos) {
-                if (temp.length() > 0) {
-                    for (int i = 0; i < nCasos; i++) {
-                        temp = temp.substr(temp.find_first_not_of(" "));
-                        flujos[tempi][tempj] = atoi(temp.substr(0, temp.find(' ')).c_str());
-                        tempj++;
-                        temp = temp.substr(temp.find(' ') + 1);
-                    }
-                    tempi++;
-                    tempj = 0;
-                }
-            }
+
             distancias = new int*[nCasos];
             for (int i = 0; i < nCasos; i++) {
                 distancias[i] = new int[nCasos];
             }
+
+            int tempi = 0;
+            int tempj = 0;
+            int numero;
+            bool fin = false;
+            while (getline(flujo, temp) && !fin) {
+                if (temp.length() > 0) {
+                    stringstream lectura(temp);
+                    while (lectura >> numero) {
+                        flujos[tempi][tempj] = numero;
+                        tempj++;
+                        if (tempj == nCasos) {
+                            tempj = 0;
+                            tempi++;
+                        }
+                    }
+                }
+                if (tempi >= nCasos) {
+                    fin = true;
+                }
+            }
             tempi = 0;
             tempj = 0;
-            while (getline(flujo, temp) && tempi < nCasos) {
+            fin = false;
+            while (getline(flujo, temp) && !fin) {
                 if (temp.length() > 0) {
-                    for (int i = 0; i < nCasos; i++) {
-                        temp = temp.substr(temp.find_first_not_of(" "));
-                        distancias[tempi][tempj] = atoi(temp.substr(0, temp.find(' ')).c_str());
+                    stringstream lectura(temp);
+                    while (lectura >> numero) {
+                        distancias[tempi][tempj] = numero;
                         tempj++;
-                        temp = temp.substr(temp.find(' ') + 1);
+                        if (tempj == nCasos) {
+                            tempj = 0;
+                            tempi++;
+                        }
                     }
-                    tempi++;
-                    tempj = 0;
+                }
+                if (tempi >= nCasos) {
+                    fin = true;
                 }
             }
             return nCasos;
@@ -283,9 +297,9 @@ int main(int argc, char** argv) {
     int *solLocal = busquedaLocal(nCasos, flujos, distancias);
 
     costo = coste(solLocal, nCasos, distancias, flujos);
-//    for (int i = 0; i < nCasos; i++) {
-//        cout << "Para la unidad " << i + 1 << " asignada localizacion " << solLocal[i] + 1 << endl;
-//    }
+    //    for (int i = 0; i < nCasos; i++) {
+    //        cout << "Para la unidad " << i + 1 << " asignada localizacion " << solLocal[i] + 1 << endl;
+    //    }
     cout << endl << "Coste del algoritmo LOCAL para el fichero( " << 1 << " ) " << fichero << " es:" << costo << endl;
 
 
