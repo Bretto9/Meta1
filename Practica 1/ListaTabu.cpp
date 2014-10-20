@@ -8,12 +8,14 @@
 #include "ListaTabu.h"
 
 ListaTabu::ListaTabu(int tam) {
-    lista(tam);
+    //lista;
+    lista.resize(tam);
     indice = 0;
 }
 
 ListaTabu::ListaTabu(const ListaTabu& orig) {
-    lista(orig);
+    //lista();
+    lista.resize(orig.lista.size());
     indice = orig.indice;
 }
 

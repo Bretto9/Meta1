@@ -285,31 +285,34 @@ bool existeVecino(int r, int s, vector<pair<int, int> > vecinos, int tam) {
     return false;
 }
 
-int generacionMejorVecino(vector<int> listaTabu, int &mejorR, int &mejorS, int nCasos, int* solActual, int **flujos, int **distancias) {
+int generacionMejorVecino(ListaTabu lista, int &mejorR, int &mejorS, int nCasos, int* solActual, int **flujos, int **distancias) {
 
     vector<pair<int, int> > vecinos;
     int nVecinos = 0;
+    int totalVecinos = 30;
     srand(time(0));
     int r;
     int s;
 
-    while (nVecinos < 30) {
+    while (nVecinos < totalVecinos) {
         r = rand() % nCasos;
         s = rand() % nCasos;
-
-        if (!listaTabu.exist(solActual[r], solActual[s], r, s,) && !existeVecino(r, s, vecinos, nVecinos)) {
+        //INTRODUCIR CRITERIO DE ASPIRACION
+        if (!lista.exist(solActual[r], solActual[s], r, s) && !existeVecino(r, s, vecinos, nVecinos)) {
 
             vecinos[nVecinos].first = r;
             vecinos[nVecinos].second = s;
             nVecinos++;
         }
     }
+
+
     mejorR = vecinos[0].first;
     mejorS = vecinos[0].second;
     int mejorCosto = factorizacion(solActual, nCasos, flujos, distancias, vecinos[0].first, vecinos[0].second);
     int costoActual;
 
-    for (int i = 0; i < nCasos; i++) {
+    for (int i = 1; i < totalVecinos; i++) {
         costoActual = factorizacion(solActual, nCasos, flujos, distancias, vecinos[i].first, vecinos[i].second);
         if (costoActual < mejorCosto) {
             mejorCosto = costoActual;
@@ -317,15 +320,52 @@ int generacionMejorVecino(vector<int> listaTabu, int &mejorR, int &mejorS, int n
             mejorS = vecinos[i].second;
         }
     }
-    
+
     return mejorCosto;
 }
 
 int* busquedaTabu(int nCasos, int **flujos, int **distancias) {
 
     int* solucionActual = solInicial(nCasos);
-    int* mejSolGlobal = solucionActual;
+    int* mejSolGlobal = new int[nCasos];
+    for (int i = 0; i < nCasos; i++) {
+        mejSolGlobal[i] = solucionActual[i];
+    }
+
+    int **frec=new int*[nCasos];
+            for (int i = 0; i < nCasos; i++) {
+                frec[i] = new int[nCasos];
+            }
+    for(int i=0;i<nCasos;i++){
+        for(int j=0;j<nCasos;j++)
+            frec[i][j]=0;
+    }
+    
+    
     int costoGlobal = coste(mejSolGlobal, nCasos, distancias, flujos);
+
+    ListaTabu lista;
+    int r, s, variacion;
+    int temp;
+    for (int i = 0; i < 10000; i++) {
+        variacion = generacionMejorVecino(lista, r, s, nCasos, solucionActual, flujos, distancias);
+      
+        temp = solucionActual[r];
+        solucionActual[r] = solucionActual[s];
+        solucionActual[s] = solucionActual[temp];
+        frec[r][s]=frec[r][s]+1;
+        if (variacion + costoGlobal < costoGlobal) {
+            costoGlobal = variacion + costoGlobal;
+
+            for (int i = 0; i < nCasos; i++) {
+                mejSolGlobal[i] = solucionActual[i];
+            }
+            
+        }
+        
+    }
+
+
 
 
 
@@ -341,22 +381,6 @@ int main(int argc, char** argv) {
         "dat/tho40.dat", "dat/tai40a.dat", "dat/sko42.dat", "dat/sko49.dat",
         "dat/tai50a.dat", "dat/tai50b.dat", "dat/tai60a.dat", "dat/lipa90a.dat"};
 
-    // GREEDY MUCHOS FICHEROS
-    //    for (int i = 0; i < 20; i++) {
-    //        cout << "Leyendo fichero... " << ficheros[i] << endl;
-    //        int nCasos = lectura(flujos, distancias, ficheros[i]);
-    //
-    //        int *solGreedy;
-    //        int costo = greedy(flujos, distancias, solGreedy, nCasos);
-    //        cout << "Coste del algoritmo voraz para el fichero( " << i + 1 << " ) " << ficheros[i] << " es:" << costo << endl;
-    //        for (int j = 0; j < nCasos; j++) {
-    //            delete[] flujos[j];
-    //            delete[] distancias[j];
-    //        }
-    //        delete flujos;
-    //        delete distancias;
-    //        delete solGreedy;
-    //    }
 
     for (int i = 0; i < 20; i++) {
         fichero = ficheros[i];
@@ -381,10 +405,14 @@ int main(int argc, char** argv) {
         //            for(int i = 0; i < nCasos; i++){
         //                cout << solucionInicial[i] << " ";
 
+
+
+
         for (int j = 0; j < nCasos; j++) {
             delete[] flujos[j];
             delete[] distancias[j];
         }
+
         delete flujos;
         delete distancias;
         delete solGreedy;
