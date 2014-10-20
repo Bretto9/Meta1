@@ -5,7 +5,7 @@
 #include <fstream>
 #include <bitset>         // std::bitset
 #include <time.h>
-
+#include <vector>
 #include <stdlib.h>
 using namespace std;
 
@@ -209,9 +209,9 @@ int *busquedaLocal(int nCasos, int **flujos, int **distancias) {
     int* solucionActual = solInicial(nCasos);
     //int* solucionCandidata = new int[nCasos];
     int costo = coste(solucionActual, nCasos, distancias, flujos);
-//    for (int i = 0; i < nCasos; i++) {
-//        solucionCandidata[i] = solucionActual[i];
-//    }
+    //    for (int i = 0; i < nCasos; i++) {
+    //        solucionCandidata[i] = solucionActual[i];
+    //    }
     bitset<100> dlb(0);
     bool mejora = false;
     for (int i = nCasos; i < 100; i++) {
@@ -224,8 +224,8 @@ int *busquedaLocal(int nCasos, int **flujos, int **distancias) {
                 mejora = false;
                 for (int j = 0; j < nCasos; j++) {
                     if (!dlb.test(j)) {
-//                        solucionCandidata[j] = solucionActual[i];
-//                        solucionCandidata[i] = solucionActual[j];
+                        //                        solucionCandidata[j] = solucionActual[i];
+                        //                        solucionCandidata[i] = solucionActual[j];
 
                         int variacion = factorizacion(solucionActual, nCasos, flujos, distancias, i, j);
 
@@ -251,11 +251,11 @@ int *busquedaLocal(int nCasos, int **flujos, int **distancias) {
                             dlb.reset(i);
                             dlb.reset(j);
                             mejora = true;
-                        } 
-//                        else {
-//                            solucionCandidata[i] = solucionActual[i];
-//                            solucionCandidata[j] = solucionActual[j];
-//                        }
+                        }
+                        //                        else {
+                        //                            solucionCandidata[i] = solucionActual[i];
+                        //                            solucionCandidata[j] = solucionActual[j];
+                        //                        }
                     }
                 }
                 if (!mejora) {
@@ -265,10 +265,68 @@ int *busquedaLocal(int nCasos, int **flujos, int **distancias) {
         }
         //cout << dlb << endl;
     }
-//    delete[] solucionCandidata;
+    //    delete[] solucionCandidata;
     //    cout << "Coste sin variacion: " << coste(solucionActual, nCasos, distancias, flujos) << endl;
     //    cout << "Coste con variacion: " << costo << endl;
     return solucionActual;
+}
+
+bool existeVecino(int r, int s, vector<pair<int, int> > vecinos, int tam) {
+
+    for (int i = 0; i < tam; i++) {
+
+        if ((vecinos[i].first == r && vecinos[i].second == s) || (vecinos[i].first == s && vecinos[i].second == r)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+int generacionMejorVecino(vector<int> listaTabu, int &mejorR, int &mejorS, int nCasos, int* solActual, int **flujos, int **distancias) {
+
+    vector<pair<int, int> > vecinos;
+    int nVecinos = 0;
+    srand(time(0));
+    int r;
+    int s;
+
+    while (nVecinos < 30) {
+        r = rand() % nCasos;
+        s = rand() % nCasos;
+
+        if (!listaTabu.exist(solActual[r], solActual[s], r, s,) && !existeVecino(r, s, vecinos, nVecinos)) {
+
+            vecinos[nVecinos].first = r;
+            vecinos[nVecinos].second = s;
+            nVecinos++;
+        }
+    }
+    mejorR = vecinos[0].first;
+    mejorS = vecinos[0].second;
+    int mejorCosto = factorizacion(solActual, nCasos, flujos, distancias, vecinos[0].first, vecinos[0].second);
+    int costoActual;
+
+    for (int i = 0; i < nCasos; i++) {
+        costoActual = factorizacion(solActual, nCasos, flujos, distancias, vecinos[i].first, vecinos[i].second);
+        if (costoActual < mejorCosto) {
+            mejorCosto = costoActual;
+            mejorR = vecinos[i].first;
+            mejorS = vecinos[i].second;
+        }
+    }
+    
+    return mejorCosto;
+}
+
+int* busquedaTabu(int nCasos, int **flujos, int **distancias) {
+
+    int* solucionActual = solInicial(nCasos);
+    int* mejSolGlobal = solucionActual;
+    int costoGlobal = coste(mejSolGlobal, nCasos, distancias, flujos);
+
+
+
 }
 
 int main(int argc, char** argv) {
@@ -306,7 +364,7 @@ int main(int argc, char** argv) {
 
         int *solGreedy;
         int costo = greedy(flujos, distancias, solGreedy, nCasos);
-        cout << "Coste del algoritmo voraz para el fichero( " << i << " ) " << fichero << " es:" << costo << endl;
+        cout << "Coste del algoritmo voraz para el fichero( " << i + 1 << " ) " << fichero << " es:" << costo << endl;
 
 
         int *solLocal = busquedaLocal(nCasos, flujos, distancias);
@@ -315,12 +373,12 @@ int main(int argc, char** argv) {
         //    for (int i = 0; i < nCasos; i++) {
         //        cout << "Para la unidad " << i + 1 << " asignada localizacion " << solLocal[i] + 1 << endl;
         //    }
-        cout << "Coste del algoritmo LOCAL para el fichero( " << i << " ) " << fichero << " es:" << costo << endl;
+        cout << "Coste del algoritmo LOCAL para el fichero( " << i + 1 << " ) " << fichero << " es:" << costo << endl;
 
         //                cout << endl << "SOLUCION INICIAL" << endl;
         //            for(int i = 0; i < nCasos; i++){
         //                cout << solucionInicial[i] << " ";
-        
+
         for (int j = 0; j < nCasos; j++) {
             delete[] flujos[j];
             delete[] distancias[j];
