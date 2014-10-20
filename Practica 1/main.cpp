@@ -332,16 +332,16 @@ int* busquedaTabu(int nCasos, int **flujos, int **distancias) {
         mejSolGlobal[i] = solucionActual[i];
     }
 
-    int **frec=new int*[nCasos];
-            for (int i = 0; i < nCasos; i++) {
-                frec[i] = new int[nCasos];
-            }
-    for(int i=0;i<nCasos;i++){
-        for(int j=0;j<nCasos;j++)
-            frec[i][j]=0;
+    int **frec = new int*[nCasos];
+    for (int i = 0; i < nCasos; i++) {
+        frec[i] = new int[nCasos];
     }
-    
-    
+    for (int i = 0; i < nCasos; i++) {
+        for (int j = 0; j < nCasos; j++)
+            frec[i][j] = 0;
+    }
+
+
     int costoGlobal = coste(mejSolGlobal, nCasos, distancias, flujos);
 
     ListaTabu lista;
@@ -349,26 +349,62 @@ int* busquedaTabu(int nCasos, int **flujos, int **distancias) {
     int temp;
     for (int i = 0; i < 10000; i++) {
         variacion = generacionMejorVecino(lista, r, s, nCasos, solucionActual, flujos, distancias);
-      
+
         temp = solucionActual[r];
         solucionActual[r] = solucionActual[s];
         solucionActual[s] = solucionActual[temp];
-        frec[r][s]=frec[r][s]+1;
+        frec[r][s] = frec[r][s] + 1;
         if (variacion + costoGlobal < costoGlobal) {
             costoGlobal = variacion + costoGlobal;
 
             for (int i = 0; i < nCasos; i++) {
                 mejSolGlobal[i] = solucionActual[i];
             }
-            
+
         }
-        
+
     }
 
 
 
 
 
+}
+
+int* largoPlazo(int **frec, int nCasos) {
+    int nuevaSolucion = new int[nCasos];
+    for (int i = 0; i < nCasos; i++) {
+        nuevaSolucion[i] = 0;
+    }
+
+    int **aux = new int*[nCasos];
+    for (int i = 0; i < nCasos; i++) {
+        aux = new int[nCasos];
+        for (int j = 0; j < nCasos; j++) {
+            aux[i][j] = frec[i][j];
+        }
+    }
+
+    int asignados = 0;
+    int menori = 0;
+    int menorj = 0;
+    while (asignados <= nCasos) {
+        for (int i = 0; i < nCasos; i++) {
+            for (int j = i; j < nCasos; j++) {
+                if (aux[i][j] < aux[menori][menorj]) {
+                    menori = i;
+                    menorj = j;
+                }
+            }
+        }
+        for(int j = 0; j < nCasos; j++){
+            aux[menori][j] = 99999999;
+            aux[j][menorj] = 99999999;
+        }
+        nuevaSolucion[menori] = menorj;
+        asignados++;
+    }
+    return nuevaSolucion;
 }
 
 int main(int argc, char** argv) {
