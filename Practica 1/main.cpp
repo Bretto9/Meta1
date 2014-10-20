@@ -306,7 +306,7 @@ int main(int argc, char** argv) {
 
         int *solGreedy;
         int costo = greedy(flujos, distancias, solGreedy, nCasos);
-        cout << "Coste del algoritmo voraz para el fichero( " << 1 << " ) " << fichero << " es:" << costo << endl;
+        cout << "Coste del algoritmo voraz para el fichero( " << i << " ) " << fichero << " es:" << costo << endl;
 
 
         int *solLocal = busquedaLocal(nCasos, flujos, distancias);
@@ -315,7 +315,7 @@ int main(int argc, char** argv) {
         //    for (int i = 0; i < nCasos; i++) {
         //        cout << "Para la unidad " << i + 1 << " asignada localizacion " << solLocal[i] + 1 << endl;
         //    }
-        cout << "Coste del algoritmo LOCAL para el fichero( " << 1 << " ) " << fichero << " es:" << costo << endl;
+        cout << "Coste del algoritmo LOCAL para el fichero( " << i << " ) " << fichero << " es:" << costo << endl;
 
         //                cout << endl << "SOLUCION INICIAL" << endl;
         //            for(int i = 0; i < nCasos; i++){
