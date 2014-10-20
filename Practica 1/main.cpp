@@ -7,6 +7,8 @@
 #include <time.h>
 #include <vector>
 #include <stdlib.h>
+
+#include "ListaTabu.h"
 using namespace std;
 
 int lectura(int **&flujos, int **&distancias, string fichero) {

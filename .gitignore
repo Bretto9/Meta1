@@ -26,3 +26,4 @@
 *.zip
 build
 *.stackdump
+*.d

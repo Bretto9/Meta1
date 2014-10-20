@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configurationDescriptor version="94">
+<configurationDescriptor version="95">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>ListaTabu.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -53,6 +54,7 @@
         <itemPath>dat/tho40.dat</itemPath>
         <itemPath>dat/tho40.sln</itemPath>
       </logicalFolder>
+      <itemPath>ListaTabu.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
@@ -80,6 +82,10 @@
       </toolsSet>
       <compileType>
       </compileType>
+      <item path="ListaTabu.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ListaTabu.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="dat/bur26a.dat" ex="false" tool="3" flavor2="0">
       </item>
       <item path="dat/bur26a.sln" ex="false" tool="3" flavor2="0">
@@ -181,6 +187,10 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
+      <item path="ListaTabu.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ListaTabu.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="dat/bur26a.dat" ex="false" tool="3" flavor2="0">
       </item>
       <item path="dat/bur26a.sln" ex="false" tool="3" flavor2="0">
