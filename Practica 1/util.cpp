@@ -341,7 +341,6 @@ int generacionMejorVecino(ListaTabu lista, int &mejorR, int &mejorS, int nCasos,
             continue;
         }
 
-        //INTRODUCIR CRITERIO DE ASPIRACION
         bool existe = existeVecino(r, s, vecinos, nVecinos);
         bool tabu = lista.exist(solActual[r], solActual[s], r, s);
         if (tabu && !existe) {
