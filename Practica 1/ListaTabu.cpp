@@ -51,17 +51,13 @@ int ListaTabu::insert(int i, int j, int posI, int posJ) {
 }
 
 bool ListaTabu::exist(int i, int j, int posI, int posJ) {
-    bool existe = false;
     for (int x = 0; x < lista.size(); x++) {
         if ((i == lista.at(x).GetI() && j == lista.at(x).GetJ() && posI == lista.at(x).GetPosI() && posJ == lista.at(x).GetPosJ()) ||
                 j == lista.at(x).GetI() && i == lista.at(x).GetJ() && posJ == lista.at(x).GetPosI() && posI == lista.at(x).GetPosI()) {
-            existe = true;
-        }
-        if (existe) {
-            break;
+            return true;
         }
     }
-    return existe;
+    return false;
 }
 
 ListaTabu::~ListaTabu() {
