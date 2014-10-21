@@ -285,6 +285,8 @@ bool existeVecino(int r, int s, vector<pair<int, int> > vecinos, int tam) {
     return false;
 }
 
+
+
 int generacionMejorVecino(ListaTabu lista, int &mejorR, int &mejorS, int nCasos, int* solActual, int **flujos, int **distancias) {
 
     vector<pair<int, int> > vecinos;
@@ -293,27 +295,27 @@ int generacionMejorVecino(ListaTabu lista, int &mejorR, int &mejorS, int nCasos,
     srand(time(0));
     int r;
     int s;
-    pair<int,int> a(-1,-1);
+    pair<int, int> a(-1, -1);
     vecinos.resize(totalVecinos, a);
-    
-    
+
+
     while (nVecinos < totalVecinos) {
         r = rand() % nCasos;
         s = rand() % nCasos;
         //INTRODUCIR CRITERIO DE ASPIRACION
-        if (!lista.exist(solActual[r], solActual[s], r, s) && !existeVecino(r, s, vecinos, nVecinos)) {
+        if (!lista.exist(solActual[r], solActual[s], r, s) && !existeVecino(r, s, vecinos, nVecinos) && factorizacion(solActual,nCasos,flujos,distancias,r,s)) {
             vecinos[nVecinos].first = r;
             vecinos[nVecinos].second = s;
             nVecinos++;
+
         }
     }
-
 
     mejorR = vecinos[0].first;
     mejorS = vecinos[0].second;
     int mejorCosto = factorizacion(solActual, nCasos, flujos, distancias, vecinos[0].first, vecinos[0].second);
     int costoActual;
-
+    // cout << "MEJOR PRIMER VECINO   " << mejorR << endl;
     for (int i = 1; i < totalVecinos; i++) {
         costoActual = factorizacion(solActual, nCasos, flujos, distancias, vecinos[i].first, vecinos[i].second);
         if (costoActual < mejorCosto) {
@@ -322,76 +324,9 @@ int generacionMejorVecino(ListaTabu lista, int &mejorR, int &mejorS, int nCasos,
             mejorS = vecinos[i].second;
         }
     }
-
+    // cout << "MEJOR VECINO TOTAL:     " << mejorR << "----" << mejorS << endl;
     return mejorCosto;
-}
 
-int* busquedaTabu(int nCasos, int **flujos, int **distancias) {
-
-    int* solucionActual = solInicial(nCasos);
-    int* mejSolGlobal = new int[nCasos];
-    for (int i = 0; i < nCasos; i++) {
-        mejSolGlobal[i] = solucionActual[i];
-    }
-
-    int **frec = new int*[nCasos];
-    for (int i = 0; i < nCasos; i++) {
-        frec[i] = new int[nCasos];
-    }
-    for (int i = 0; i < nCasos; i++) {
-        for (int j = 0; j < nCasos; j++)
-            frec[i][j] = 0;
-    }
-
-
-    int costoGlobal = coste(mejSolGlobal, nCasos, distancias, flujos);
-
-    ListaTabu lista;
-    int r, s, variacion;
-    int temp;
-    int noSeActualiza = 0;
-    srand(time(0));
-    int prob;
-    for (int i = 0; i < 10000; i++) {
-        //generar mejor vecino
-        if (noSeActualiza == 10) {
-            //REINICIALIZO
-            prob = rand() % 100;
-            if (prob < 24) {
-                solucionActual = solInicial(nCasos);
-            } else if (prob < 49) {
-                 for (int i = 0; i < nCasos; i++) {
-                solucionActual[i] = mejSolGlobal[i];
-            }
-            } else {
-                
-                //Llamar reinicializacion largo plazo
-            }
-        }
-
-        variacion = generacionMejorVecino(lista, r, s, nCasos, solucionActual, flujos, distancias);
-
-        temp = solucionActual[r];
-        solucionActual[r] = solucionActual[s];
-        solucionActual[s] = solucionActual[temp];
-        if (r > s) { //Actualizar matriz frecuencia
-            frec[r][s]++;
-        } else {
-            frec[s][r]++;
-        }
-        if (variacion + costoGlobal < costoGlobal) { //Actualizar mejorSolucion global
-            costoGlobal = variacion + costoGlobal;
-            for (int i = 0; i < nCasos; i++) {
-                mejSolGlobal[i] = solucionActual[i];
-            }
-            noSeActualiza = 0;
-        } else {
-            noSeActualiza++;
-        }
-    }
-
-
-    return mejSolGlobal;
 }
 
 int* largoPlazo(int **frec, int nCasos) {
@@ -420,7 +355,7 @@ int* largoPlazo(int **frec, int nCasos) {
                 }
             }
         }
-        for(int j = 0; j < nCasos; j++){
+        for (int j = 0; j < nCasos; j++) {
             aux[menori][j] = 99999999;
             aux[j][menorj] = 99999999;
         }
@@ -428,6 +363,81 @@ int* largoPlazo(int **frec, int nCasos) {
         asignados++;
     }
     return nuevaSolucion;
+}
+
+int* busquedaTabu(int nCasos, int **flujos, int **distancias) {
+
+    int* solucionActual = solInicial(nCasos);
+    int* mejSolGlobal = new int[nCasos];
+    for (int i = 0; i < nCasos; i++) {
+        mejSolGlobal[i] = solucionActual[i];
+    }
+
+    int **frec = new int*[nCasos];
+    for (int i = 0; i < nCasos; i++) {
+        frec[i] = new int[nCasos];
+    }
+    for (int i = 0; i < nCasos; i++) {
+        for (int j = 0; j < nCasos; j++)
+            frec[i][j] = 0;
+    }
+
+
+    int costoGlobal = coste(mejSolGlobal, nCasos, distancias, flujos);
+
+    ListaTabu lista(nCasos / 2);
+    int r, s, variacion;
+    int temp;
+    int noSeActualiza = 0;
+    srand(time(0));
+    int prob;
+    for (int i = 0; i < 1000; i++) {
+        //generar mejor vecino
+        if (noSeActualiza == 10) {
+            //REINICIALIZO
+
+            prob = rand() % 100;
+            if (prob < 24) {
+                cout << "REINICIALIZO aleatorio" << endl;
+                solucionActual = solInicial(nCasos);
+                lista.reset(true);
+            } else if (prob < 49) {
+                for (int i = 0; i < nCasos; i++) {
+                    cout << "REINICIALIZO mejorGlobal" << endl;
+
+                    solucionActual[i] = mejSolGlobal[i];
+                }
+                lista.reset(false);
+            } else {
+                solucionActual = largoPlazo(frec, nCasos);
+                lista.reset(true);
+                cout << "REINICIALIZO largo plazo " << endl;
+
+            }
+        }
+        variacion = generacionMejorVecino(lista, r, s, nCasos, solucionActual, flujos, distancias);
+        temp = solucionActual[r];
+        solucionActual[r] = solucionActual[s];
+        solucionActual[s] = temp;
+        if (r > s) { //Actualizar matriz frecuencia
+            frec[r][s]++;
+        } else {
+            frec[s][r]++;
+        }
+        lista.insert(solucionActual[r], solucionActual[s], r, s);
+        if (variacion + costoGlobal < costoGlobal) { //Actualizar mejorSolucion global
+            costoGlobal = variacion + costoGlobal;
+            for (int i = 0; i < nCasos; i++) {
+                mejSolGlobal[i] = solucionActual[i];
+            }
+            noSeActualiza = 0;
+        } else {
+            noSeActualiza++;
+        }
+    }
+
+
+    return mejSolGlobal;
 }
 
 int main(int argc, char** argv) {
@@ -442,37 +452,37 @@ int main(int argc, char** argv) {
 
     int nCasos = lectura(flujos, distancias, fichero);
     int *solTabu = busquedaTabu(nCasos, flujos, distancias);
-    cout << solTabu << endl;
-    for(int i = 0; i < nCasos; i++){
+    //cout << solTabu << endl;
+    for (int i = 0; i < nCasos; i++) {
         cout << solTabu[i] << " ";
     }
     int costo = coste(solTabu, nCasos, distancias, flujos);
-    
+
     cout << "Coste del algoritmo TABU para el fichero " << fichero << " es: " << costo << endl;
-//    for (int i = 0; i < 20; i++) {
-//        fichero = ficheros[i];
-//        //GREEDY UN FICERO
-//        cout << "Leyendo fichero... " << fichero << endl;
-//        int nCasos = lectura(flujos, distancias, fichero);
-//        int *solGreedy;
-//        int costo = greedy(flujos, distancias, solGreedy, nCasos);
-//        cout << "Coste del algoritmo voraz para el fichero( " << i + 1 << " ) " << fichero << " es:" << costo << endl;
-//        int *solLocal = busquedaLocal(nCasos, flujos, distancias);
-//        costo = coste(solLocal, nCasos, distancias, flujos);
-//        //    for (int i = 0; i < nCasos; i++) {
-//        //        cout << "Para la unidad " << i + 1 << " asignada localizacion " << solLocal[i] + 1 << endl;
-//        //    }
-//        cout << "Coste del algoritmo LOCAL para el fichero( " << i + 1 << " ) " << fichero << " es:" << costo << endl;
-//        //                cout << endl << "SOLUCION INICIAL" << endl;
-//        //            for(int i = 0; i < nCasos; i++){
-//        //                cout << solucionInicial[i] << " ";
-//        for (int j = 0; j < nCasos; j++) {
-//            delete[] flujos[j];
-//            delete[] distancias[j];
-//        }
-//        delete flujos;
-//        delete distancias;
-//        delete solGreedy;
-//    }
+    //    for (int i = 0; i < 20; i++) {
+    //        fichero = ficheros[i];
+    //        //GREEDY UN FICERO
+    //        cout << "Leyendo fichero... " << fichero << endl;
+    //        int nCasos = lectura(flujos, distancias, fichero);
+    //        int *solGreedy;
+    //        int costo = greedy(flujos, distancias, solGreedy, nCasos);
+    //        cout << "Coste del algoritmo voraz para el fichero( " << i + 1 << " ) " << fichero << " es:" << costo << endl;
+    //        int *solLocal = busquedaLocal(nCasos, flujos, distancias);
+    //        costo = coste(solLocal, nCasos, distancias, flujos);
+    //        //    for (int i = 0; i < nCasos; i++) {
+    //        //        cout << "Para la unidad " << i + 1 << " asignada localizacion " << solLocal[i] + 1 << endl;
+    //        //    }
+    //        cout << "Coste del algoritmo LOCAL para el fichero( " << i + 1 << " ) " << fichero << " es:" << costo << endl;
+    //        //                cout << endl << "SOLUCION INICIAL" << endl;
+    //        //            for(int i = 0; i < nCasos; i++){
+    //        //                cout << solucionInicial[i] << " ";
+    //        for (int j = 0; j < nCasos; j++) {
+    //            delete[] flujos[j];
+    //            delete[] distancias[j];
+    //        }
+    //        delete flujos;
+    //        delete distancias;
+    //        delete solGreedy;
+    //    }
     return 0;
 }
