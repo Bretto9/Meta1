@@ -347,22 +347,45 @@ int* busquedaTabu(int nCasos, int **flujos, int **distancias) {
     ListaTabu lista;
     int r, s, variacion;
     int temp;
+    int noSeActualiza = 0;
+    srand(time(0));
+    int prob;
     for (int i = 0; i < 10000; i++) {
+        //generar mejor vecino
+        if (noSeActualiza == 10) {
+            //REINICIALIZO
+            prob = rand() % 100;
+            if (prob < 24) {
+                solucionActual = solInicial(nCasos);
+            } else if (prob < 49) {
+                 for (int i = 0; i < nCasos; i++) {
+                solucionActual[i] = mejSolGlobal[i];
+            }
+            } else {
+                
+                //Llamar reinicializacion largo plazo
+            }
+        }
+
         variacion = generacionMejorVecino(lista, r, s, nCasos, solucionActual, flujos, distancias);
 
         temp = solucionActual[r];
         solucionActual[r] = solucionActual[s];
         solucionActual[s] = solucionActual[temp];
-        frec[r][s] = frec[r][s] + 1;
-        if (variacion + costoGlobal < costoGlobal) {
+        if (r > s) { //Actualizar matriz frecuencia
+            frec[r][s]++;
+        } else {
+            frec[s][r]++;
+        }
+        if (variacion + costoGlobal < costoGlobal) { //Actualizar mejorSolucion global
             costoGlobal = variacion + costoGlobal;
-
             for (int i = 0; i < nCasos; i++) {
                 mejSolGlobal[i] = solucionActual[i];
             }
-
+            noSeActualiza = 0;
+        } else {
+            noSeActualiza++;
         }
-
     }
 
 
