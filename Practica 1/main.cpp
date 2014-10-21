@@ -293,13 +293,15 @@ int generacionMejorVecino(ListaTabu lista, int &mejorR, int &mejorS, int nCasos,
     srand(time(0));
     int r;
     int s;
-
+    pair<int,int> a(-1,-1);
+    vecinos.resize(totalVecinos, a);
+    
+    
     while (nVecinos < totalVecinos) {
         r = rand() % nCasos;
         s = rand() % nCasos;
         //INTRODUCIR CRITERIO DE ASPIRACION
         if (!lista.exist(solActual[r], solActual[s], r, s) && !existeVecino(r, s, vecinos, nVecinos)) {
-
             vecinos[nVecinos].first = r;
             vecinos[nVecinos].second = s;
             nVecinos++;
@@ -389,20 +391,18 @@ int* busquedaTabu(int nCasos, int **flujos, int **distancias) {
     }
 
 
-
-
-
+    return mejSolGlobal;
 }
 
 int* largoPlazo(int **frec, int nCasos) {
-    int nuevaSolucion = new int[nCasos];
+    int *nuevaSolucion = new int[nCasos];
     for (int i = 0; i < nCasos; i++) {
         nuevaSolucion[i] = 0;
     }
 
     int **aux = new int*[nCasos];
     for (int i = 0; i < nCasos; i++) {
-        aux = new int[nCasos];
+        aux[i] = new int[nCasos];
         for (int j = 0; j < nCasos; j++) {
             aux[i][j] = frec[i][j];
         }
@@ -433,48 +433,46 @@ int* largoPlazo(int **frec, int nCasos) {
 int main(int argc, char** argv) {
 
     int **flujos, **distancias;
-    string fichero = "dat/lipa90a.dat";
+    string fichero = "dat/tho40.dat";
     string ficheros[20] = {"dat/els19.dat", "dat/chr20a.dat", "dat/chr25a.dat", "dat/nug25.dat",
         "dat/bur26a.dat", "dat/bur26b.dat", "dat/tai30a.dat", "dat/tai30b.dat",
         "dat/esc32a.dat", "dat/kra32.dat", "dat/tai35a.dat", "dat/tai35b.dat",
         "dat/tho40.dat", "dat/tai40a.dat", "dat/sko42.dat", "dat/sko49.dat",
         "dat/tai50a.dat", "dat/tai50b.dat", "dat/tai60a.dat", "dat/lipa90a.dat"};
 
-
-    for (int i = 0; i < 20; i++) {
-        fichero = ficheros[i];
-        //GREEDY UN FICERO
-        cout << "Leyendo fichero... " << fichero << endl;
-        int nCasos = lectura(flujos, distancias, fichero);
-
-        int *solGreedy;
-        int costo = greedy(flujos, distancias, solGreedy, nCasos);
-        cout << "Coste del algoritmo voraz para el fichero( " << i + 1 << " ) " << fichero << " es:" << costo << endl;
-
-
-        int *solLocal = busquedaLocal(nCasos, flujos, distancias);
-
-        costo = coste(solLocal, nCasos, distancias, flujos);
-        //    for (int i = 0; i < nCasos; i++) {
-        //        cout << "Para la unidad " << i + 1 << " asignada localizacion " << solLocal[i] + 1 << endl;
-        //    }
-        cout << "Coste del algoritmo LOCAL para el fichero( " << i + 1 << " ) " << fichero << " es:" << costo << endl;
-
-        //                cout << endl << "SOLUCION INICIAL" << endl;
-        //            for(int i = 0; i < nCasos; i++){
-        //                cout << solucionInicial[i] << " ";
-
-
-
-
-        for (int j = 0; j < nCasos; j++) {
-            delete[] flujos[j];
-            delete[] distancias[j];
-        }
-
-        delete flujos;
-        delete distancias;
-        delete solGreedy;
+    int nCasos = lectura(flujos, distancias, fichero);
+    int *solTabu = busquedaTabu(nCasos, flujos, distancias);
+    cout << solTabu << endl;
+    for(int i = 0; i < nCasos; i++){
+        cout << solTabu[i] << " ";
     }
+    int costo = coste(solTabu, nCasos, distancias, flujos);
+    
+    cout << "Coste del algoritmo TABU para el fichero " << fichero << " es: " << costo << endl;
+//    for (int i = 0; i < 20; i++) {
+//        fichero = ficheros[i];
+//        //GREEDY UN FICERO
+//        cout << "Leyendo fichero... " << fichero << endl;
+//        int nCasos = lectura(flujos, distancias, fichero);
+//        int *solGreedy;
+//        int costo = greedy(flujos, distancias, solGreedy, nCasos);
+//        cout << "Coste del algoritmo voraz para el fichero( " << i + 1 << " ) " << fichero << " es:" << costo << endl;
+//        int *solLocal = busquedaLocal(nCasos, flujos, distancias);
+//        costo = coste(solLocal, nCasos, distancias, flujos);
+//        //    for (int i = 0; i < nCasos; i++) {
+//        //        cout << "Para la unidad " << i + 1 << " asignada localizacion " << solLocal[i] + 1 << endl;
+//        //    }
+//        cout << "Coste del algoritmo LOCAL para el fichero( " << i + 1 << " ) " << fichero << " es:" << costo << endl;
+//        //                cout << endl << "SOLUCION INICIAL" << endl;
+//        //            for(int i = 0; i < nCasos; i++){
+//        //                cout << solucionInicial[i] << " ";
+//        for (int j = 0; j < nCasos; j++) {
+//            delete[] flujos[j];
+//            delete[] distancias[j];
+//        }
+//        delete flujos;
+//        delete distancias;
+//        delete solGreedy;
+//    }
     return 0;
 }
