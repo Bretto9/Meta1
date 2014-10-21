@@ -27,3 +27,5 @@
 build
 *.stackdump
 *.d
+*.mk
+*.xml
