@@ -1,3 +1,4 @@
+
 #include "util.h"
 
 using namespace std;
@@ -11,6 +12,7 @@ int main(int argc, char** argv) {
         "dat/esc32a.dat", "dat/kra32.dat", "dat/tai35a.dat", "dat/tai35b.dat",
         "dat/tho40.dat", "dat/tai40a.dat", "dat/sko42.dat", "dat/sko49.dat",
         "dat/tai50a.dat", "dat/tai50b.dat", "dat/tai60a.dat", "dat/lipa90a.dat"};
+//    cout << "Usando semilla: " << seed << endl;
     for (int i = 0; i < 20; i++) {
         fichero = ficheros[i];
 

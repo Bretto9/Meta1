@@ -1,4 +1,5 @@
 #include "util.h"
+#define seed 1413921551
 
 // DESARROLLO Y COMENTARIO DE LAS FUNCIONES
 
@@ -10,6 +11,7 @@
  * @return nCasos numero de filas y columnas que tiene las matrices
  */
 int lectura(int **&flujos, int **&distancias, string fichero) {
+
     string temp;
     ifstream flujo(fichero.c_str());
     int nCasos = 0;
@@ -200,7 +202,6 @@ int greedy(int **flujos, int **distancias, int *&solGreedy, int nCasos) {
  * @return Vector solucion, generado aleatoriamente
  */
 int* solInicial(int tam) {
-    int seed = time(0);
     srand(seed);
     int aleatorio;
     int *solucionInicial = new int[tam];
@@ -308,6 +309,7 @@ bool existeVecino(int r, int s, vector<pair<int, int> > vecinos, int tam) {
     }
     return false;
 }
+
 /**
  * Funcion para generar 30 vecinos
  * 
@@ -321,16 +323,16 @@ bool existeVecino(int r, int s, vector<pair<int, int> > vecinos, int tam) {
  * @param k Numero de iteraciones que lleva el problema en ejecucion
  * @return Variacion con respecto al coste, del mejor intercambio posible.
  */
-int generacionMejorVecino(ListaTabu lista, int &mejorR, int &mejorS, int nCasos, int* solActual, int **flujos, int **distancias, int k) {
+int generacionMejorVecino(ListaTabu lista, int &mejorR, int &mejorS, int nCasos, int* solActual, int **flujos, int **distancias, int *k) {
     vector<pair<int, int> > vecinos;
     int nVecinos = 0;
     int totalVecinos = 30;
-    srand(time(0));
+    srand(seed);
     int r = 1;
     int s = 1;
     pair<int, int> a(-1, -1);
     vecinos.resize(totalVecinos, a);
-
+    int mejorCoste = coste(k, nCasos, distancias, flujos);
     while (nVecinos < totalVecinos) {
         r = rand() % nCasos;
         s = rand() % nCasos;
@@ -345,48 +347,10 @@ int generacionMejorVecino(ListaTabu lista, int &mejorR, int &mejorS, int nCasos,
         if (tabu && !existe) {
             int variacion = abs(factorizacion(solActual, nCasos, flujos, distancias, r, s));
             int costo = coste(solActual, nCasos, distancias, flujos);
-            if (k >= 0 && k < 1500) {
-                if (variacion > costo) {
-                    vecinos[nVecinos].first = r;
-                    vecinos[nVecinos].second = s;
-                    nVecinos++;
-                }
-            } else if (k >= 1500 && k < 3000) {
-                if (variacion > costo * 0.9) {
-                    vecinos[nVecinos].first = r;
-                    vecinos[nVecinos].second = s;
-                    nVecinos++;
-                }
-            } else if (k >= 3000 && k < 4500) {
-                if (variacion > costo * 0.7) {
-                    vecinos[nVecinos].first = r;
-                    vecinos[nVecinos].second = s;
-                    nVecinos++;
-                }
-            } else if (k >= 4500 && k < 6000) {
-                if (variacion > costo * 0.6) {
-                    vecinos[nVecinos].first = r;
-                    vecinos[nVecinos].second = s;
-                    nVecinos++;
-                }
-            } else if (k >= 6000 && k < 7500) {
-                if (variacion > costo * 0.3) {
-                    vecinos[nVecinos].first = r;
-                    vecinos[nVecinos].second = s;
-                    nVecinos++;
-                }
-            } else if (k >= 7500 && k < 9000) {
-                if (variacion > costo * 0.15) {
-                    vecinos[nVecinos].first = r;
-                    vecinos[nVecinos].second = s;
-                    nVecinos++;
-                }
-            } else {
-                if (variacion > costo * 0.05) {
-                    vecinos[nVecinos].first = r;
-                    vecinos[nVecinos].second = s;
-                    nVecinos++;
-                }
+            if (costo + variacion < mejorCoste) {
+                vecinos[nVecinos].first = r;
+                vecinos[nVecinos].second = s;
+                nVecinos++;
             }
         } else if (!tabu && !existe) {
             vecinos[nVecinos].first = r;
@@ -508,7 +472,7 @@ int* busquedaTabu(int nCasos, int **flujos, int **distancias) {
             }
         }
 
-        variacion = generacionMejorVecino(lista, r, s, nCasos, solucionActual, flujos, distancias, k);
+        variacion = generacionMejorVecino(lista, r, s, nCasos, solucionActual, flujos, distancias, mejSolGlobal);
         temp = solucionActual[r];
         solucionActual[r] = solucionActual[s];
         solucionActual[s] = temp;
