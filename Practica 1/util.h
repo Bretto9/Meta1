@@ -33,19 +33,19 @@ int coste(int *v, int tam, int **distancias, int **flujos);
 
 int greedy(int **flujos, int **distancias, int *&solGreedy, int nCasos);
 
-int* solInicial(int tam);
+int* solInicial(int tam, int seed);
 
 int factorizacion(int* v, int tam, int **flujos, int** distancias, int r, int s);
 
-int *busquedaLocal(int nCasos, int **flujos, int **distancias);
+int *busquedaLocal(int nCasos, int **flujos, int **distancias, int seed);
 
 bool existeVecino(int r, int s, vector<pair<int, int> > vecinos, int tam);
 
-int generacionMejorVecino(ListaTabu lista, int &mejorR, int &mejorS, int nCasos, int* solActual, int **flujos, int **distancias, int k);
+int generacionMejorVecino(ListaTabu lista, int &mejorR, int &mejorS, int nCasos, int* solActual, int **flujos, int **distancias, int k, int seed);
 
 int* largoPlazo(int **frec, int nCasos) ;
 
-int* busquedaTabu(int nCasos, int **flujos, int **distancias);
+int* busquedaTabu(int nCasos, int **flujos, int **distancias, int seed);
 
 
 

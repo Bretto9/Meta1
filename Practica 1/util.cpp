@@ -1,5 +1,5 @@
 #include "util.h"
-#define seed 1413921551
+
 
 // DESARROLLO Y COMENTARIO DE LAS FUNCIONES
 
@@ -201,7 +201,7 @@ int greedy(int **flujos, int **distancias, int *&solGreedy, int nCasos) {
  * @param tam Tamaño del vector solucion
  * @return Vector solucion, generado aleatoriamente
  */
-int* solInicial(int tam) {
+int* solInicial(int tam, int seed) {
     srand(seed);
     int aleatorio;
     int *solucionInicial = new int[tam];
@@ -257,8 +257,8 @@ int factorizacion(int* v, int tam, int **flujos, int** distancias, int r, int s)
  * @param distancias Matriz de distancias
  * @return Vector solucion
  */
-int *busquedaLocal(int nCasos, int **flujos, int **distancias) {
-    int* solucionActual = solInicial(nCasos);
+int *busquedaLocal(int nCasos, int **flujos, int **distancias, int seed) {
+    int* solucionActual = solInicial(nCasos, seed);
     int costo = coste(solucionActual, nCasos, distancias, flujos);
     bitset<100> dlb(0);
     bool mejora = false;
@@ -323,7 +323,7 @@ bool existeVecino(int r, int s, vector<pair<int, int> > vecinos, int tam) {
  * @param k Numero de iteraciones que lleva el problema en ejecucion
  * @return Variacion con respecto al coste, del mejor intercambio posible.
  */
-int generacionMejorVecino(ListaTabu lista, int &mejorR, int &mejorS, int nCasos, int* solActual, int **flujos, int **distancias, int *k) {
+int generacionMejorVecino(ListaTabu lista, int &mejorR, int &mejorS, int nCasos, int* solActual, int **flujos, int **distancias, int *k, int seed) {
     vector<pair<int, int> > vecinos;
     int nVecinos = 0;
     int totalVecinos = 30;
@@ -431,9 +431,9 @@ int* largoPlazo(int **frec, int nCasos) {
  * @param distancias Matriz de distancias
  * @return Vector solucion
  */
-int* busquedaTabu(int nCasos, int **flujos, int **distancias) {
+int* busquedaTabu(int nCasos, int **flujos, int **distancias, int seed) {
 
-    int* solucionActual = solInicial(nCasos);
+    int* solucionActual = solInicial(nCasos, seed);
     int* mejSolGlobal = new int[nCasos];
     for (int i = 0; i < nCasos; i++) {
         mejSolGlobal[i] = solucionActual[i];
@@ -452,14 +452,14 @@ int* busquedaTabu(int nCasos, int **flujos, int **distancias) {
     int r, s, variacion;
     int temp;
     int noSeActualiza = 0;
-    srand(time(0));
+    srand(seed);
     int prob;
     for (int k = 0; k < 10000; k++) {
 
         if (noSeActualiza == 10) { //PARAMETROS DE REINICIALIZACION
             prob = rand() % 100;
             if (prob < 24) {
-                solucionActual = solInicial(nCasos);
+                solucionActual = solInicial(nCasos, seed);
                 lista.reset(true);
             } else if (prob < 49) {
                 for (int i = 0; i < nCasos; i++) {
@@ -472,7 +472,7 @@ int* busquedaTabu(int nCasos, int **flujos, int **distancias) {
             }
         }
 
-        variacion = generacionMejorVecino(lista, r, s, nCasos, solucionActual, flujos, distancias, mejSolGlobal);
+        variacion = generacionMejorVecino(lista, r, s, nCasos, solucionActual, flujos, distancias, mejSolGlobal, seed);
         temp = solucionActual[r];
         solucionActual[r] = solucionActual[s];
         solucionActual[s] = temp;
