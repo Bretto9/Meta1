@@ -20,7 +20,20 @@ private:
 public:
     MovimientoTabu(): i(-1), j(-1), posI(-1), posJ(-1){};
     MovimientoTabu(int _i, int _j, int _posI, int _posJ): i(_i), j(_j), posI(_posI), posJ(_posJ){}
-
+    MovimientoTabu(const MovimientoTabu &orig){
+        i = orig.i;
+        j = orig.j;
+        posI = orig.posI;
+        posJ = orig.posJ;
+    }
+    
+    MovimientoTabu& operator=(const MovimientoTabu &b){
+        i = b.i;
+        j = b.j;
+        posI = b.posI;
+        posJ = b.posJ;
+    }
+    
     void SetPosJ(int posJ) {
         this->posJ = posJ;
     }
@@ -64,10 +77,12 @@ public:
     int insert(int i, int j, int posI, int posJ);
     bool exist(int i, int j, int posI, int posJ);
     void reset(bool aumento);
+    void clear();
     
 private:
     std::vector<MovimientoTabu> lista;
     int indice;
+    int maxTam, minTam;
 
 };
 
